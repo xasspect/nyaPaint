@@ -4,14 +4,19 @@ project(nyaPaint)
 set(CMAKE_CXX_STANDARD 20)
 #set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
-#set(CMAKE_AUTORCC ON)
-#set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_PREFIX_PATH "C:/Qt/6.11.1/mingw_64")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -mwindows")
+
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
 set(SOURCES
+        src/resources/resources.qrc
+        nyaPaint.rc
+
         src/main.cpp
         src/canvas/Canvas.cpp
         src/canvas/CanvasModel.cpp
@@ -46,7 +51,7 @@ set(HEADERS
         src/tools/FillTool.h
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_executable(${PROJECT_NAME} WIN32 ${SOURCES} ${HEADERS})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

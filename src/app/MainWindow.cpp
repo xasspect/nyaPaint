@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
       , m_brushSize(nullptr)
       , m_modified(false) {
     setWindowTitle("Nya Paint - untitled.nya");
+    setWindowIcon(QIcon(":/icon.ico"));
     resize(1280, 720);
 
     setupUI();
