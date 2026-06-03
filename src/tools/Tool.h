@@ -24,6 +24,8 @@ public:
 
     virtual void mouseReleaseEvent(QMouseEvent *event, CanvasModel *model);
 
+    virtual bool isDrawing() const { return false;}
+
     void setColor(const QColor &color);
 
     QColor color() const;
@@ -31,6 +33,8 @@ public:
     void setSize(int size);
 
     int size() const;
+
+    virtual void cancelLine() {}
 
 protected:
     QColor m_color;

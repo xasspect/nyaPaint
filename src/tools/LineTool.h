@@ -17,11 +17,17 @@ public:
 
     void mouseReleaseEvent(QMouseEvent *event, CanvasModel *model) override;
 
+    void cancelLine();
+
+    bool isDrawing() const;
+
 private:
     QPoint m_startPoint;
     QPoint m_currentPoint;
     bool m_lineStarted;
     QImage m_backupImage;
+    QImage m_undoImage;
 
     QPoint snapToAngle(const QPoint &start, const QPoint &end) const;
+
 };

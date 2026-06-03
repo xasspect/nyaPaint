@@ -109,12 +109,19 @@ void MainWindow::setupMenuBar() {
     QAction *undoAction = editMenu->addAction("&Undo");
     undoAction->setShortcut(QKeySequence::Undo);
     connect(undoAction, &QAction::triggered, this, [this]() {
+
+        Tool * current = m_toolManager->currentTool();
+        if (current && current->isDrawing()) return;
         if (m_model) m_model->undo();
+
     });
 
     QAction *redoAction = editMenu->addAction("&Redo");
     redoAction->setShortcut(QKeySequence::Redo);
     connect(redoAction, &QAction::triggered, this, [this]() {
+        Tool * current = m_toolManager->currentTool();
+        if (current && current->isDrawing()) return;
+
         if (m_model) m_model->redo();
     });
 }
@@ -202,6 +209,11 @@ void MainWindow::onSaveAs() {
 }
 
 void MainWindow::onToolChanged(Tool *tool) {
+    Tool* previous = m_toolManager->currentTool();
+    if (previous && previous != tool) {
+        previous->cancelLine();
+    }
+
     if (m_canvas) m_canvas->setTool(tool);
 
     if (tool && m_colorPicker) {
