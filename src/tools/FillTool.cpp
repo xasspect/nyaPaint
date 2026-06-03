@@ -18,7 +18,7 @@ QCursor FillTool::cursor() const {
 
     QPainter painter(&pixmap);
     painter.setPen(Qt::black);
-    painter.setBrush(m_color);
+    painter.setBrush(Qt::Dense7Pattern );
 
     painter.drawRect(5, 10, 10, 6);
     painter.drawLine(7, 10, 4, 2);
@@ -30,7 +30,7 @@ QCursor FillTool::cursor() const {
 
     painter.end();
 
-    return QCursor(pixmap, 10, 10);
+    return QCursor(pixmap, 10, 0);
 }
 
 void FillTool::mousePressEvent(QMouseEvent *event, CanvasModel *model) {

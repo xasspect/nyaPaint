@@ -1,61 +1,36 @@
 #include "UndoManager.h"
 
-UndoManager::UndoManager(QObject *parent)
-    : QObject(parent) {
+UndoManager::UndoManager(QObject* parent)
+    : QObject(parent)
+{
 }
 
-void UndoManager::saveState(const QImage &image) {
-    m_undoStack.push(image.copy());
-
-    m_redoStack.clear();
-
-    while (m_undoStack.size() > MAX_HISTORY) {
-        m_undoStack.removeFirst();
-    }
-
+void UndoManager::saveState(const QImage& image) {
+    m_storage.push(image);
     emit historyChanged();
 }
 
 bool UndoManager::canUndo() const {
-    return m_undoStack.size() >= 2;  // Минимум 2 для отмены
+    return m_storage.canUndo();
 }
 
 bool UndoManager::canRedo() const {
-    return !m_redoStack.isEmpty();
+    return m_storage.canRedo();
 }
 
 QImage UndoManager::undo() {
-    if (m_undoStack.isEmpty()) {
-        return QImage();
-    }
-
-    QImage current = m_undoStack.pop();
-    m_redoStack.push(current);
-
+    QImage result = m_storage.undo();
     emit historyChanged();
-
-    if (m_undoStack.isEmpty()) {
-        return current;
-    }
-    return m_undoStack.top();
+    return result;
 }
 
-
 QImage UndoManager::redo() {
-    if (m_redoStack.isEmpty()) {
-        return QImage();
-    }
-
-    QImage image = m_redoStack.pop();
-    m_undoStack.push(image);
-
+    QImage result = m_storage.redo();
     emit historyChanged();
-
-    return image;
+    return result;
 }
 
 void UndoManager::clear() {
-    m_undoStack.clear();
-    m_redoStack.clear();
+    m_storage.clear();
     emit historyChanged();
 }
