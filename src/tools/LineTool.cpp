@@ -24,7 +24,7 @@ QCursor LineTool::cursor() const {
     painter.drawLine(2, 14, 14, 2); // Диагональная линия
     painter.end();
 
-    return QCursor(pixmap, 8, 8);
+    return QCursor(pixmap, 2, 15);
 }
 
 QPoint LineTool::snapToAngle(const QPoint &start, const QPoint &end) const {
@@ -92,4 +92,5 @@ void LineTool::mouseMoveEvent(QMouseEvent *event, CanvasModel *model) {
 
 
 void LineTool::mouseReleaseEvent(QMouseEvent *event, CanvasModel *model) {
+
 }

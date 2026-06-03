@@ -1,32 +1,33 @@
 #pragma once
 #include <QObject>
-#include <QStack>
 #include <QImage>
+#include "UndoStack.h"
+#include "UndoList.h"
+
+
+#define UNDO_LIST
+
 
 class UndoManager : public QObject {
     Q_OBJECT
 
 public:
-    explicit UndoManager(QObject *parent = nullptr);
+    explicit UndoManager(QObject* parent = nullptr);
 
-
-    void saveState(const QImage &image);
-
+    void saveState(const QImage& image);
     bool canUndo() const;
-
     bool canRedo() const;
-
     QImage undo();
-
     QImage redo();
-
     void clear();
 
-signals:
-    void historyChanged();
+    signals:
+        void historyChanged();
 
 private:
-    QStack<QImage> m_undoStack;
-    QStack<QImage> m_redoStack;
-    static const int MAX_HISTORY = 50;
+#ifdef UNDO_LIST
+    UndoList m_storage;   //FIFO
+#else
+    UndoStack m_storage;  //LIFO (по умолчанию)
+#endif
 };

@@ -50,7 +50,7 @@ void ColorPickerWidget::setupUI() {
     mainLayout->addLayout(m_gridLayout);
 
     int columns = 4;
-    for (int i = 0; i < m_defaultColors.size(); i++) {
+    for (int i = 0; i < m_defaultColors.size(); i++) { // цикл создания кнопко выбора цвета на виджете
         QPushButton *button = createColorButton(m_defaultColors[i]);
         int row = i / columns;
         int col = i % columns;

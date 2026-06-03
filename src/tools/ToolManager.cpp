@@ -29,16 +29,6 @@ void ToolManager::selectTool(int index) {
     // qDebug() << "выбрано : " << m_tools[index]->name();
 }
 
-void ToolManager::selectTool(const QString &name) {
-    for (int i = 0; i < m_tools.size(); i++) {
-        if (m_tools[i]->name() == name) {
-            selectTool(i);
-            return;
-        }
-    }
-}
-
-
 Tool *ToolManager::currentTool() const {
     if (m_currentIndex >= 0 && m_currentIndex < m_tools.size()) {
         return m_tools[m_currentIndex];
