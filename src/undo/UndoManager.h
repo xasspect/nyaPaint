@@ -1,11 +1,15 @@
 #pragma once
 #include <QObject>
 #include <QImage>
-#include "UndoStack.h"
-#include "UndoList.h"
+#include <QRect>
+#include <QStack>
 
 
-#define UNDO_LIST
+struct CanvasPatch {
+    QRect rect;         // Область, где произошли изменения
+    QImage oldPixels;   // Как эти пиксели выглядели ДО мазка кистью
+    QImage newPixels;   // Как они выглядят ПОСЛЕ
+};
 
 
 class UndoManager : public QObject {
@@ -13,21 +17,24 @@ class UndoManager : public QObject {
 
 public:
     explicit UndoManager(QObject* parent = nullptr);
-
+    void setBaseState(const QImage& image);
     void saveState(const QImage& image);
     bool canUndo() const;
     bool canRedo() const;
-    QImage undo();
-    QImage redo();
+    QImage undo(QImage currentCanvas);
+    QImage redo(QImage currentCanvas);
     void clear();
 
     signals:
         void historyChanged();
-
 private:
-#ifdef UNDO_LIST
-    UndoList m_storage;   //FIFO
-#else
-    UndoStack m_storage;  //LIFO (по умолчанию)
-#endif
+    // Математический алгоритм поиска измененной области
+    QRect calculateDiffBounds(const QImage& img1, const QImage& img2) const;
+
+    QStack<CanvasPatch> m_undoStack;
+    QStack<CanvasPatch> m_redoStack;
+
+    // Храним последнее известное состояние для сравнения с новым
+    QImage m_lastState;
+    static const int MAX_MEMORY_MB = 100;
 };
