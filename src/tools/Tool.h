@@ -24,7 +24,7 @@ public:
 
     virtual void mouseReleaseEvent(QMouseEvent *event, CanvasModel *model);
 
-    virtual bool isDrawing() const { return false;}
+    virtual bool isDrawing() const { return m_drawing;}
 
     void setColor(const QColor &color);
 

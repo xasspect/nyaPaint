@@ -8,7 +8,7 @@ CanvasModel::CanvasModel(const QSize &size, QObject *parent)
     m_image = QImage(size, QImage::Format_ARGB32);
     m_image.fill(Qt::white);
 
-    m_undoManager->saveState(m_image);
+    m_undoManager->setBaseState(m_image);
     connect(this, &CanvasModel::imageChangeCommitted,
             this, &CanvasModel::onImageChangeCommitted);
 }
@@ -35,20 +35,20 @@ UndoManager *CanvasModel::undoManager() const {
 
 void CanvasModel::undo() {
     if (!m_undoManager->canUndo()) return;
-    m_image = m_undoManager->undo();
+    m_image = m_undoManager->undo(m_image);
     emit imageChanged();
 }
 
 
 void CanvasModel::redo() {
     if (!m_undoManager->canRedo()) return;
-    m_image = m_undoManager->redo();
+    m_image = m_undoManager->redo(m_image);
     emit imageChanged();
 }
 
 void CanvasModel::clear() {
     m_image.fill(Qt::white);
-    m_undoManager->saveState(m_image);
+    m_undoManager->setBaseState(m_image);
     emit imageChanged();
 }
 
@@ -56,5 +56,6 @@ void CanvasModel::newCanvas(const QSize &size) {
     m_canvasSize = size;
     m_image = QImage(size, QImage::Format_ARGB32);
     m_image.fill(Qt::white);
+    m_undoManager->setBaseState(m_image); // Устанавливаем базу
     emit imageChanged();
 }
